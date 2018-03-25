@@ -1,3 +1,3 @@
-const aux = (props) => props.children;
+const Wrap = (props) => props.children;
 
-export default aux;
+export default Wrap;
