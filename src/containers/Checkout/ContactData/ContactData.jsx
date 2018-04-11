@@ -4,6 +4,7 @@ import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Button from '../../../components/UI/Button/Button';
 import Input from '../../../components/UI/Input/Input';
+import { connect } from 'react-redux';
 
 export class ContactData extends Component {
     state = {
@@ -89,13 +90,6 @@ export class ContactData extends Component {
                 valid: true
             },
         },
-
-        // name: '',
-        // email: '',
-        // address: {
-        //     street: '',
-        //     postalCode: ''
-        // },
         formIsValid: false,
         loading: false,
         totalPrice: 0
@@ -109,24 +103,13 @@ export class ContactData extends Component {
             formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value
         }
         const order = {
-            ingredients: this.props.ingredients,
+            ingredients: this.props.ings,
             price: this.props.price,
-            orderData: formData,
-            customer: {
-                name: 'Guy',
-                adress: {
-                    street: '123 fake st',
-                    zipCode: '41351',
-                    country: 'USA'
-                },
-                email: '1234@email.com'
-            },
-            deliverMethod: 'fast'
+            orderData: formData
         }
 
         axios.post('/orders.json', order)
             .then(response => {
-                // this.setState({ loading: false });
                 this.props.history.push('/');
             })
             .catch(error => { this.setState({ loading: false }) })
@@ -199,4 +182,11 @@ export class ContactData extends Component {
     }
 }
 
-export default ContactData;
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients,
+        price: state.totalPrice
+    }
+}
+
+export default connect(mapStateToProps)(ContactData);
